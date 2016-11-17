@@ -77,6 +77,20 @@ RUN CUDNN_DOWNLOAD_SUM=a87cb2df2e5e7cc0a05e266734e679ee1a2fadad6f06af82a76ed81a2
     rm cudnn-8.0-linux-x64-v5.1.tgz && \
     ldconfig
 
+###############
+## Miniconda ##
+###############
+
+# https://hub.docker.com/r/continuumio/miniconda/~/dockerfile/
+RUN apt-get install -y --no-install-recommends \
+        wget \
+		ca-certificates
+
+RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
+    wget https://repo.continuum.io/miniconda/Miniconda2-4.1.11-Linux-x86_64.sh -O miniconda.sh && \
+    /bin/bash miniconda.sh -b -p /opt/conda && \
+    rm miniconda.sh
+
 ################
 ## TensorFlow ##
 ################
@@ -88,17 +102,17 @@ RUN apt-get install -y --no-install-recommends \
         libpng12-dev \
         libzmq3-dev \
         pkg-config \
-		python \
-        python-dev \
         software-properties-common \
         unzip
-RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
-    rm get-pip.py
-# Ubuntu/Linux 64-bit, GPU enabled, Python 2.7
-# Requires CUDA toolkit 8.0 and CuDNN v5.
+
+# https://www.tensorflow.org/versions/r0.11/get_started/os_setup.html#anaconda-installation
+SHELL ["/bin/bash", "-c"]
+WORKDIR /opt/conda/bin
+# https://github.com/ContinuumIO/anaconda-issues/issues/542
+RUN ./conda update -y setuptools
+RUN ./pip install --upgrade pip
 ENV TF_BINARY_URL https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.11.0-cp27-none-linux_x86_64.whl
-RUN pip install --upgrade $TF_BINARY_URL
+RUN ./pip install --ignore-installed --upgrade $TF_BINARY_URL
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
 ENV CUDA_HOME /usr/local/cuda
 
@@ -107,87 +121,28 @@ ENV CUDA_HOME /usr/local/cuda
 ###########
 
 # https://keras.io/#installation
-RUN pip install keras
-RUN pip install h5py
+RUN ./pip install keras && \
+	./pip install h5py
 
 ############
 ## OpenCV ##
 ############
 
-# http://www.pyimagesearch.com/2016/07/11/compiling-opencv-with-cuda-support/
-# https://github.com/chipgarner/opencv3-webcam-docker/blob/master/Dockerfile
-# https://github.com/opencv/opencv/pull/6510
+# http://askubuntu.com/questions/761589/installing-libgtk-x11-2-0-so-0-in-ubuntu-15-04
 RUN apt-get install -y --no-install-recommends \
-		libjpeg8-dev \
-		libtiff5-dev \
-		libjasper-dev \
-		libgtk2.0-dev \
-		libavcodec-dev \
-		libavformat-dev \
-		libswscale-dev \
-		libv4l-dev \
-		libatlas-base-dev \
-		libhdf5-serial-dev \
-		libjpeg-dev \
-		libavformat-dev \
-		libswscale-dev \
-		libdc1394-22-dev \
-		libxine-dev \
-		libgstreamer0.10-dev \
-		libgstreamer-plugins-base0.10-dev \
-		libv4l-dev \
-		libtbb-dev \
-		libeigen3-dev \
-		libqt4-dev \
-		libmp3lame-dev \
-		libopencore-amrnb-dev \
-		libopencore-amrwb-dev \
-		libtheora-dev \
-		libvorbis-dev \
-		libxvidcore-dev \
-		# Doesn't work libfaac-dev \
-		# Doesn't work ffmpeg \
-		#  zlib1g-dev \
-		#  libavcodec-dev \
-		x264 \ 
-		v4l-utils \
-		gfortran \
-		yasm \
-		python-numpy \
-		checkinstall \
-		wget \
-		unzip 
-RUN wget https://cmake.org/files/v3.7/cmake-3.7.0-Linux-x86_64.sh
-RUN chmod +x cmake-3.7.0-Linux-x86_64.sh
-RUN ./cmake-3.7.0-Linux-x86_64.sh --skip-license && rm cmake-3.7.0-Linux-x86_64.sh
-WORKDIR opencv_compile
-RUN wget -O opencv.zip https://github.com/opencv/opencv/archive/3.1.0.zip
-RUN unzip opencv.zip && rm opencv.zip
-WORKDIR opencv-3.1.0
-WORKDIR build
-RUN cmake -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D WITH_CUDA=ON \
-    -D ENABLE_FAST_MATH=1 \
-    -D CUDA_FAST_MATH=1 \
-    -D WITH_CUBLAS=1 ..
-RUN make -j$(nproc)
-RUN make install
-RUN ldconfig
-WORKDIR / 
-RUN rm -rf opencv_compile
+		libgtk2.0-0
 
-# This works:
-# apt-get install -y python-opencv
-# But it's only 2.4.8.
-# Let's try Anaconda
+# https://anaconda.org/menpo/opencv3
+RUN ./conda install -y -c menpo opencv3=3.1.0
 
 #############################
-### Other Python libraries ##
+## Other Python libraries ##
 #############################
-#
-##############
-#
-#RUN apt-get clean && \
-#    rm -rf /var/lib/apt/lists/*
-#CMD ["python"]
+
+############
+### Misc. ##
+############
+
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+CMD ["/opt/conda/bin/python"]
