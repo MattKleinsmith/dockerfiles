@@ -139,10 +139,14 @@ RUN ./conda install -y -c menpo opencv3=3.1.0
 ## Other Python libraries ##
 #############################
 
+RUN ./pip install zmq
+
 ############
 ### Misc. ##
 ############
 
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-CMD ["/opt/conda/bin/python"]
+ENV PATH /opt/conda/bin:$PATH
+WORKDIR /research-master
+CMD bash
