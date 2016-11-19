@@ -95,7 +95,7 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
 ## TensorFlow ##
 ################
 
-# https://www.tensorflow.org/versions/r0.11/get_started/os_setup.html#pip-installation
+# https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/docker/Dockerfile.gpu
 RUN apt-get install -y --no-install-recommends \
         build-essential \
         libfreetype6-dev \
@@ -105,11 +105,12 @@ RUN apt-get install -y --no-install-recommends \
         software-properties-common \
         unzip
 
-# https://www.tensorflow.org/versions/r0.11/get_started/os_setup.html#anaconda-installation
 SHELL ["/bin/bash", "-c"]
 WORKDIR /opt/conda/bin
 # https://github.com/ContinuumIO/anaconda-issues/issues/542
 RUN ./conda update -y setuptools
+# https://www.tensorflow.org/versions/r0.11/get_started/os_setup.html#pip-installation
+# Ubuntu/Linux 64-bit, GPU enabled, Python 2.7; Requires CUDA toolkit 8.0 and CuDNN v5.
 RUN ./pip install --upgrade pip
 ENV TF_BINARY_URL https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.11.0-cp27-none-linux_x86_64.whl
 RUN ./pip install --ignore-installed --upgrade $TF_BINARY_URL
