@@ -22,12 +22,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip
-
-RUN pip install \
+RUN pip install --upgrade pip && \
+    pip install \
         setuptools \
         numpy
 
-RUN git clone https://github.com/openai/universe.git
-
-RUN cd universe && pip install -e .
+RUN git clone https://github.com/openai/universe.git && \
+    cd universe && \
+    pip install -e .
