@@ -1,10 +1,10 @@
 The container was able to connect to a Universe environment running on a machine on the local network. This is the code it used:
-```
+```python
 import gym
 import universe  # register the universe environments
 
 env = gym.make('flashgames.DuskDrive-v0')
-env.configure(remotes="vnc://<a local machine's IP>:5900+15900")  # automatically creates a local docker container
+env.configure(remotes="vnc://<remote machine's IP>:5900+15900")
 observation_n = env.reset()
 
 while True:
