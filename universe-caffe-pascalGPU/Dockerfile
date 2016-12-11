@@ -1,4 +1,4 @@
-FROM matthewkleinsmith/caffe:pascal
+FROM matthewkleinsmith/caffe-pascalgpu
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         cmake \
