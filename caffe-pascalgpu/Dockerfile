@@ -1,5 +1,11 @@
 FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu14.04
 
+# Template:
+#    https://github.com/BVLC/caffe/blob/master/docker/standalone/gpu/Dockerfile
+# Differences:
+#    CUDA 8.0 (see FROM command)
+#    Pascal architecture (see cmake settings)
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         cmake \
@@ -42,10 +48,5 @@ ENV PYCAFFE_ROOT $CAFFE_ROOT/python
 ENV PYTHONPATH $PYCAFFE_ROOT:$PYTHONPATH
 ENV PATH $CAFFE_ROOT/build/tools:$PYCAFFE_ROOT:$PATH
 RUN echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        python-opencv
-
-RUN pip install lmdb
 
 WORKDIR /
