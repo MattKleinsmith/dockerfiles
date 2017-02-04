@@ -29,6 +29,8 @@ RUN pip install \
     keras \
     bcolz
 
-RUN conda install -c menpo dlib=18.18
+RUN conda install -y -c menpo dlib=18.18
+
+RUN conda install -y numpy
 
 WORKDIR /nbs
