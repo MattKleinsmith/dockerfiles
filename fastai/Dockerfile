@@ -33,6 +33,7 @@ RUN conda install -y -c menpo dlib=18.18
 
 RUN conda install -y numpy
 
-RUN conda install -y -c menpo opencv3=3.2.0
+RUN conda install -y -c menpo opencv3=3.2.0 && \
+    apt-get install -y libgtk2.0-0
 
 WORKDIR /nbs
