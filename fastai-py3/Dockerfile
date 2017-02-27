@@ -9,29 +9,20 @@ RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificate
     git mercurial subversion vim
 
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-    wget --quiet https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
+    wget --quiet https://repo.continuum.io/archive/Anaconda3-4.3.0-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
     rm ~/anaconda.sh
 
 ENV PATH /opt/conda/bin:$PATH
 
-####################
-## TensorFlow GPU ##
-####################
-
+#####################
+## Python packages ##
+#####################
 
 RUN pip install --upgrade pip
 
-# Tensorflow
-# Only the CPU version of TensorFlow is available at the moment and can be installed in the conda environment for Python 2 or Python 3.
-ENV TF_BINARY_URL https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-0.12.1-cp35-cp35m-linux_x86_64.whl
-RUN pip3 install --ignore-installed --upgrade $TF_BINARY_URL
-
-###########################
-## Other Python packages ##
-###########################
-
-RUN pip3 install \
+RUN pip install \
+    tensorflow-gpu \
     keras \
     bcolz
 
@@ -40,7 +31,7 @@ RUN pip3 install \
 ######################
 
 RUN conda install -y notebook==4.3.1 && \
-    conda install -c conda-forge jupyter_contrib_nbextensions && \
+    conda install -y -c conda-forge jupyter_contrib_nbextensions && \
     jupyter nbextensions_configurator enable --user
 
 ADD .jupyter /root/.jupyter
