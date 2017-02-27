@@ -36,4 +36,10 @@ RUN conda install -y notebook==4.3.1 && \
 
 ADD .jupyter /root/.jupyter
 
+###########
+## Other ##
+###########
+
+RUN conda install -y pytorch torchvision cuda80 -c soumith
+
 WORKDIR /nbs
