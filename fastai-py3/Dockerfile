@@ -24,7 +24,8 @@ RUN pip install --upgrade pip
 RUN pip install \
     tensorflow-gpu \
     keras \
-    bcolz
+    bcolz \
+    xgboost
 
 ######################
 ## Jupyter notebook ##
