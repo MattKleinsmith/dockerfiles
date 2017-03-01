@@ -25,7 +25,9 @@ RUN pip install \
     tensorflow-gpu \
     keras \
     bcolz \
-    xgboost
+    xgboost \
+    gensim \ 
+    keras_tqdm
 
 ######################
 ## Jupyter notebook ##
@@ -35,7 +37,16 @@ RUN conda install -y notebook==4.3.1 && \
     conda install -y -c conda-forge jupyter_contrib_nbextensions && \
     jupyter nbextensions_configurator enable --user
 
+# Add my jupyter settings
 ADD .jupyter /root/.jupyter
+
+
+############
+## FFmpeg ##
+############
+
+RUN add-apt-repository ppa:mc3man/trusty-media && apt-get update && \
+    apt-get install -y ffmpeg
 
 ###########
 ## Other ##
