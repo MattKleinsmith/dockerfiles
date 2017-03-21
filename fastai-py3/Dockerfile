@@ -33,13 +33,14 @@ RUN pip install \
 ## Jupyter notebook ##
 ######################
 
-RUN conda install -y notebook==4.3.1 && \
+RUN conda install -y notebook==4.4.1 && \
     conda install -y -c conda-forge jupyter_contrib_nbextensions && \
     jupyter nbextensions_configurator enable --user
 
 # Add my jupyter settings
 ADD .jupyter /root/.jupyter
 
+ADD conda install -c conda-forge ipywidgets
 
 ############
 ## FFmpeg ##
@@ -53,5 +54,7 @@ RUN add-apt-repository ppa:mc3man/trusty-media && apt-get update && \
 ###########
 
 RUN conda install -y pytorch torchvision cuda80 -c soumith
+RUN CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
+ADD .bashrc /root/.bashrc
 
 WORKDIR /nbs
