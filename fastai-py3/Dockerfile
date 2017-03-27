@@ -23,7 +23,7 @@ RUN pip install --upgrade pip
 
 RUN pip install \
     tensorflow-gpu \
-    keras \
+    keras==1.2.2 \
     bcolz \
     xgboost \
     gensim \ 
@@ -40,7 +40,7 @@ RUN conda install -y notebook==4.4.1 && \
 # Add my jupyter settings
 ADD .jupyter /root/.jupyter
 
-ADD conda install -c conda-forge ipywidgets
+RUN conda install -y -c conda-forge ipywidgets
 
 ############
 ## FFmpeg ##
