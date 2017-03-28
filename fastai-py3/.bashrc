@@ -98,9 +98,22 @@ fi
 #    . /etc/bash_completion
 #fi
 
+# Jupyter
 export CUDA_DEVICE_ORDER="PCI_BUS_ID"
 alias tb="tensorboard --logdir=/tmp/tb"
 alias rmtb="rm /tmp/tb"
 alias j8="CUDA_VISIBLE_DEVICES=0 jupyter notebook --port=8888"
 alias j9="CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889"
 alias j0="CUDA_VISIBLE_DEVICES=2 jupyter notebook --port=8890"
+# Git                                                                            
+alias gs='git status'
+alias gpull="git pull"
+alias gl="git log --oneline"
+alias gc="git checkout"
+alias gd="git diff"
+alias ga="git add"
+alias gcm="git commit -m"
+# Python                                                                         
+alias p="ipython"
+alias p3="ipython3"
+
