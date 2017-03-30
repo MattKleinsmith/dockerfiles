@@ -116,4 +116,11 @@ alias gcm="git commit -m"
 # Python                                                                         
 alias p="ipython"
 alias p3="ipython3"
-
+# Misc
+function set-title(){                                                            
+  if [[ -z "$ORIG" ]]; then                                                      
+    ORIG=$PS1                                                                    
+  fi                                                                             
+  TITLE="\[\e]2;$*\a\]"                                                          
+  PS1=${ORIG}${TITLE}                                                            
+} 
