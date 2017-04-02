@@ -26,7 +26,7 @@ RUN pip install \
     keras==1.2.2 \
     bcolz \
     xgboost \
-    gensim \ 
+    gensim \
     keras_tqdm
 
 ######################
@@ -55,6 +55,7 @@ RUN add-apt-repository ppa:mc3man/trusty-media && apt-get update && \
 
 RUN conda install -y pytorch torchvision cuda80 -c soumith
 RUN CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
+RUN conda install -c menpo opencv3=3.2.0
 
 ###########
 ## Torch ##
@@ -84,5 +85,7 @@ RUN luarocks install unsup
 ###########
 
 ADD .bashrc /root/.bashrc
+ADD .vimrc /root/.vimrc
+ADD .vim /root/.vim
 
 WORKDIR /nbs
