@@ -45,8 +45,6 @@ RUN conda install -y pytorch torchvision cuda80 -c soumith
 
 RUN CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
 
-RUN conda install -c menpo opencv3=3.2.0
-
 ###########
 ## Torch ##
 ###########
@@ -61,8 +59,9 @@ WORKDIR /root
 
 RUN git clone https://github.com/torch/distro.git torch --recursive && \
     cd torch && \
+    apt-get install -y sudo && \
     bash install-deps && \
-    ./install.sh
+    printf "y\n" | ./install.sh
 
 ENV PATH=/root/torch/install/bin:$PATH
 

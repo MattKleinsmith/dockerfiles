@@ -133,7 +133,7 @@ stty -ixon
 alias size1="df -h | grep --color=never 'Used\|root'"
 alias size2="du -h --max-depth=1 ."
 # Directories
-alias ti="cd /nbs/Tiramisu"
+alias t="cd /nbs/Tiramisu"
 alias nb="cd /nbs"
 alias seg="cd /nbs/segstyle/"
 export t="/tmp"
