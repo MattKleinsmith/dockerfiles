@@ -129,7 +129,6 @@ function set-title(){
 function ps2(){
     ps -fC $1
 }
-xset r rate 275 75
 stty -ixon
 alias size1="df -h | grep --color=never 'Used\|root'"
 alias size2="du -h --max-depth=1 ."

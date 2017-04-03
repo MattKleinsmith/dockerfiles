@@ -1,43 +1,99 @@
 FROM gcr.io/tensorflow/tensorflow:latest-gpu
 
-RUN apt-get update && apt-get install -y \
-        git \
-        libatk1.0-dev \
-        libbonoboui2-dev \
-        libcairo2-dev \
-        libgnome2-dev \
-        libgnomeui-dev \
-        libgtk2.0-dev \
-        libncurses5-dev \
-        libx11-dev \
-        libxpm-dev \
-        libxt-dev \
-        python3-dev \
-        wget
+###########
+## Tools ##
+###########
+
+RUN apt-get update --fix-missing && apt-get install -y \
+    ffmpeg \
+    git \
+    vim \
+    wget
+
+##############
+## Anaconda ##
+##############
+
+RUN apt-get update --fix-missing && apt-get install -y \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1
+
+RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
+    wget --quiet https://repo.continuum.io/archive/Anaconda3-4.3.1-Linux-x86_64.sh -O ~/anaconda.sh && \
+    /bin/bash ~/anaconda.sh -b -p /opt/conda && \
+    rm ~/anaconda.sh
+
+ENV PATH /opt/conda/bin:$PATH
+
+#####################
+## Python packages ##
+#####################
+
+RUN pip install --upgrade \
+        pip && \
+    pip install \
+        bcolz \
+        gensim \
+        keras==1.2.2 \
+        keras_tqdm \
+        tensorflow-gpu \
+        xgboost
+
+RUN conda install -y pytorch torchvision cuda80 -c soumith
+
+RUN CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
+
+RUN conda install -c menpo opencv3=3.2.0
+
+###########
+## Torch ##
+###########
+
+RUN apt-get update --fix-missing && apt-get install -y \
+    libssl-dev \
+    libzmq3-dev \
+    python-zmq \
+    software-properties-common
 
 WORKDIR /root
 
-RUN wget ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2
+RUN git clone https://github.com/torch/distro.git torch --recursive && \
+    cd torch && \
+    bash install-deps && \
+    ./install.sh
 
-RUN tar -xf /root/vim-7.4.tar.bz2 && rm /root/vim-7.4.tar.bz2
+ENV PATH=/root/torch/install/bin:$PATH
 
-WORKDIR vim74
+# For the arbitrary style transfer repo
+RUN luarocks install unsup
 
-RUN ./configure \
-    --with-features=huge \
-    --enable-multibyte \
-    --enable-python3interp=yes \
-    --with-python3-config-dir=/usr/lib/python3.5/config-3.5m-x86_64-linux-gnu \
-    --enable-gui=gtk2 --enable-cscope --prefix=/usr
+#############
+## Jupyter ##
+#############
 
-RUN make -j$(nproc) VIMRUNTIMEDIR=/usr/share/vim/vim74
+RUN conda install -y notebook==4.4.1 && \
+    conda install -y -c conda-forge jupyter_contrib_nbextensions && \
+    jupyter nbextensions_configurator enable --user
 
-RUN make -j$(nproc) install
+# Add my Jupyter settings
+ADD .jupyter /root/.jupyter
 
-WORKDIR /root
+RUN conda install -y -c conda-forge ipywidgets
 
-RUN rm -r vim74
+RUN git clone https://github.com/facebook/iTorch.git && \
+    cd iTorch && \
+    luarocks make
+
+##################
+## Config files ##
+##################
+
+ADD .vimrc /root/.vimrc
+
+ADD .vim /root/.vim
 
 ADD .bashrc /root/.bashrc
-ADD .vimrc /root/.vimrc
-ADD .vim /root/.vim
+
+WORKDIR /root

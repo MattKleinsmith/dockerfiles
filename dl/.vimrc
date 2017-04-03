@@ -113,7 +113,7 @@ color wombat256mod
 " You need to reload this file for the change to apply
 "
 
-"syntax on
+syntax on
 "
 "set nocompatible
 "set nocp
