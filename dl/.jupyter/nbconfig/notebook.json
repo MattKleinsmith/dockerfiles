@@ -1,0 +1,6 @@
+{
+  "load_extensions": {
+    "nbextensions_configurator/config_menu/main": true, 
+    "collapsible_headings/main": true
+  }
+}
