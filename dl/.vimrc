@@ -1,4 +1,10 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set term=screen-256color
+" Rebind <Leader> key
+" I like to have it here becuase it is easier to reach than the default and
+" it is next to ``m`` and ``n`` which I use for navigating between tabs.
+" I mapped my Caps Lock to the Escape key.
+let mapleader = ","
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vundle
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible              " be iMproved, required
@@ -16,7 +22,7 @@ Plugin 'VundleVim/Vundle.vim'
 " plugin on GitHub repos
 Plugin 'powerline/powerline'
 Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'python-mode/python-mode'
+"Plugin 'python-mode/python-mode'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'tpope/vim-fugitive'
@@ -24,6 +30,16 @@ Plugin 'tpope/vim-sensible'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
+" ============================================================================
+" Python mode
+" ============================================================================
+" Settings for python-mode
+"map <Leader>g :call RopeGotoDefinition()<CR>
+"let g:pymode_python = 'python3'
+"let g:pymode_lint_ignore="W0401,E501"
+"let g:pymode_rope_goto_definition_bind = "<C-]>"
+"let g:pymode_run_bind = "<C-S-e>"
+"let g:pymode_doc_bind = "<C-S-d>"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set encoding=utf-8
 
@@ -54,10 +70,6 @@ autocmd BufWritePre * %s/\s\+$//e
 " Mouse and backspace
 set bs=2 " make backspace behave like normal again
 
-" Rebind <Leader> key
-" I like to have it here becuase it is easier to reach than the default and
-" it is next to ``m`` and ``n`` which I use for navigating between tabs.
-let mapleader = ","
 
 " Bind nohl
 " Removes highlight of your last search
@@ -67,9 +79,9 @@ vnoremap <C-n> :nohl<CR>
 inoremap <C-n> :nohl<CR>
 
 " Quick save command
-noremap <C-S> :update<CR>
-vnoremap <C-S> <C-C>:update<CR>
-inoremap <C-S> <C-O>:update<CR>
+noremap <C-S> :update<CR><C-c>
+vnoremap <C-S> <C-C>:update<CR><C-c>
+inoremap <C-S> <C-O>:update<CR><C-c>
 
 " Quick quit command
 noremap <C-Z> :quit<CR>
@@ -100,7 +112,7 @@ vnoremap > >gv " better indentation
 
 " Show whitespace
 " MUST be inserted BEFORE the colorscheme command
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=none guibg=none
 au InsertLeave * match ExtraWhitespace /\s\+$/
 
 " Color scheme
@@ -109,10 +121,6 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 set t_Co=256
 color wombat256mod
 
-" Enable syntax highlighting
-" You need to reload this file for the change to apply
-"
-
 syntax on
 "
 "set nocompatible
@@ -120,9 +128,11 @@ syntax on
 
 " Showing line numbers and length
 set number " show line numbers
-set tw=79 " width of document (used by gd)
-set nowrap " don't automatically wrap on load
-set fo-=t " don't automatically wrap text when typing
+set tw=0 " width of document (used by gd)
+"set nowrap " don't automatically wrap on load
+"set fo-=t " don't automatically wrap text when typing
+set wrap linebreak nolist
+set breakindent
 set colorcolumn=80
 highlight ColorColumn ctermbg=233
 
@@ -143,7 +153,7 @@ set shiftround
 set expandtab
 
 " Make search case insensitive
-set hlsearch
+"set hlsearch
 set incsearch
 set ignorecase
 set smartcase
@@ -169,10 +179,9 @@ set wildignore+=*.pyc
 set wildignore+=*_build/*
 set wildignore+=*/coverage/*
 
-" Settings for python-mode
-map <Leader>g :call RopeGotoDefinition()<CR>
-let g:pymode_python = 'python3'
-let g:pymode_lint_ignore="W0401,E501"
+
+
+
 map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
 " Better navigating through omnicomplete option list
@@ -249,10 +258,10 @@ nnoremap <buffer> <F9> :!ipython --no-confirm-exit -i %<CR><CR>
 nnoremap <buffer> <S-F9> :!ipython %<CR>
 nnoremap - ddjP
 nnoremap _ ddkP
-nnoremap <S-F5> :so $vrc<CR>
+nnoremap <S-F5> :so $vrc
 nnoremap <F5> :edit<CR>
 nnoremap <C-c> :noh<CR><C-c>
-nmap <Delete> O<Esc>
-nmap <CR> o<Esc>
+nmap <Delete> O<C-c>
+nmap <CR> o<C-c>
 " Remove automatic comment insertion
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
