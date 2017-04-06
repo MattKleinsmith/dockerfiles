@@ -104,9 +104,9 @@ alias tb="tensorboard --logdir=/tmp/tb"
 alias rmtb="rm /tmp/tb"
 # Jupyter
 export CUDA_DEVICE_ORDER="PCI_BUS_ID"
-alias j8="CUDA_VISIBLE_DEVICES=0 jupyter notebook --port=8888"
-alias j9="CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889"
-alias j0="CUDA_VISIBLE_DEVICES=2 jupyter notebook --port=8890"
+alias j8="CUDA_VISIBLE_DEVICES=0 jupyter notebook --port=8888 --allow-root"
+alias j9="CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889 --allow-root"
+alias j0="CUDA_VISIBLE_DEVICES=2 jupyter notebook --port=8890 --allow-root"
 # Git
 alias gs='git status'
 alias gpull="git pull"
@@ -134,6 +134,7 @@ alias size1="df -h | grep --color=never 'Used\|root'"
 alias size2="du -h --max-depth=1 ."
 # Directories
 alias t="cd /nbs/Tiramisu"
+alias d="cd /nbs/impactai/dstl"
 alias nb="cd /nbs"
 alias seg="cd /nbs/segstyle/"
 export t="/tmp"
@@ -150,10 +151,16 @@ alias sb="source $brc"
 export vrc=~/.vimrc
 alias vv="vim $vrc"
 function v(){
-    vim $1
+    vim "$1"
 }
 # Programming
 alias tagsl="ctags -R --fields=+l --languages=python --python-kinds=-i -f ./tags ./"
 #alias tags="ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags $(python -c "import os, sys; print(' '.join('{}'.format(d) for d in sys.path if os.path.isdir(d)))") ./"
 alias tags="ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags $(python -c "import os, sys; print(' '.join('{}'.format(d) for d in sys.path if os.path.isdir(d)))") ./"
 # Unsorted / New
+function py(){
+    jupyter nbconvert --to python "$1"
+}
+function ipy(){
+    ipython --no-confirm-exit -i "$1"
+}

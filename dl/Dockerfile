@@ -85,6 +85,16 @@ RUN git clone https://github.com/facebook/iTorch.git && \
     cd iTorch && \
     luarocks make
 
+#######################
+## Satellite imagery ##
+#######################
+
+RUN conda create -n py35 python=3.5 ipykernel
+
+RUN source activate py35 && \
+    conda install -y nb_conda_kernels && \
+    conda install -y -c menpo opencv3=3.2.0
+
 ##################
 ## Config files ##
 ##################
