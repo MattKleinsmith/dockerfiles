@@ -104,9 +104,13 @@ alias tb="tensorboard --logdir=/tmp/tb"
 alias rmtb="rm /tmp/tb"
 # Jupyter
 export CUDA_DEVICE_ORDER="PCI_BUS_ID"
-alias j8="CUDA_VISIBLE_DEVICES=0 jupyter notebook --port=8888 --allow-root"
-alias j9="CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889 --allow-root"
-alias j0="CUDA_VISIBLE_DEVICES=2 jupyter notebook --port=8890 --allow-root"
+alias j8="CUDA_VISIBLE_DEVICES=0 jupyter notebook --port=8888"
+alias j9="CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889"
+alias j0="CUDA_VISIBLE_DEVICES=2 jupyter notebook --port=8890"
+alias j82="source activate py35 && CUDA_VISIBLE_DEVICES=0 jupyter notebook --port=8888 --allow-root NotebookApp.iopub_data_rate_limit=10000000"
+alias j92="source activate py35 && CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889 --allow-root NotebookApp.iopub_data_rate_limit=10000000"
+alias j02="source activate py35 && CUDA_VISIBLE_DEVICES=2 jupyter notebook --port=8890 --allow-root NotebookApp.iopub_data_rate_limit=10000000"
+source activate py35 && CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889 --allow-root --
 # Git
 alias gs='git status'
 alias gpull="git pull"
@@ -164,3 +168,4 @@ function py(){
 function ipy(){
     ipython --no-confirm-exit -i "$1"
 }
+alias p3="source activate py35"

@@ -89,11 +89,41 @@ RUN git clone https://github.com/facebook/iTorch.git && \
 ## Satellite imagery ##
 #######################
 
-RUN conda create -n py35 python=3.5 ipykernel
+RUN apt-get install -y \
+    libgeos-dev
 
-RUN source activate py35 && \
-    conda install -y nb_conda_kernels && \
-    conda install -y -c menpo opencv3=3.2.0
+# On 2017-04-06, OpenCV3 was incompatible with Python 3.6
+RUN conda create -y -n py35 python=3.5 ipykernel
+
+RUN /bin/bash -c "source activate py35 && \
+    conda install -y \
+        nb_conda_kernels && \
+    conda install -y -c menpo \
+        opencv3=3.2.0"
+
+RUN /bin/bash -c "source activate py35 && \
+    pip install \
+        bcolz \
+        gensim \
+        h5py \
+        keras==1.2.2 \
+        keras_tqdm \
+        matplotlib \
+        pandas \
+        scikit-image \
+        scikit-learn \
+        shapely \
+        tensorflow-gpu \
+        tifffile \
+        xgboost"
+
+RUN /bin/bash -c "source activate py35 && \
+    conda install -y -c soumith \
+        pytorch \
+        torchvision \
+        cuda80"
+
+RUN CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
 
 ##################
 ## Config files ##

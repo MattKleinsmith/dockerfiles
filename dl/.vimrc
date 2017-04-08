@@ -65,18 +65,14 @@ endif
 autocmd BufWritePre * %s/\s\+$//e
 
 " map ctrl n to line numbers
+set nonumber
+set relativenumber
 :nmap <C-N><C-N> :set invnumber<CR>
+:nmap <F3> :set invrelativenumber<CR>
 
 " Mouse and backspace
 set bs=2 " make backspace behave like normal again
 
-
-" Bind nohl
-" Removes highlight of your last search
-" ``<C>`` stands for ``CTRL`` and therefore ``<C-n>`` stands for ``CTRL+n``
-noremap <C-n> :nohl<CR>
-vnoremap <C-n> :nohl<CR>
-inoremap <C-n> :nohl<CR>
 
 " Quick save command
 noremap <C-S> :update<CR><C-c>
@@ -127,7 +123,6 @@ syntax on
 "set nocp
 
 " Showing line numbers and length
-set number " show line numbers
 set tw=0 " width of document (used by gd)
 "set nowrap " don't automatically wrap on load
 "set fo-=t " don't automatically wrap text when typing
