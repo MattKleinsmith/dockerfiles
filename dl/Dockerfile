@@ -92,7 +92,7 @@ RUN git clone https://github.com/facebook/iTorch.git && \
 RUN apt-get install -y \
     libgeos-dev
 
-# On 2017-04-06, OpenCV3 was incompatible with Python 3.6
+# On 2017-04-06, OpenCV 3 was incompatible with Python 3.6
 RUN conda create -y -n py35 python=3.5 ipykernel
 
 RUN /bin/bash -c "source activate py35 && \
@@ -123,7 +123,12 @@ RUN /bin/bash -c "source activate py35 && \
         torchvision \
         cuda80"
 
-RUN CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
+RUN /bin/bash -c "source activate py35 && \
+    CC=\"cc -mavx2\" pip install -U --force-reinstall pillow-simd"
+
+RUN /bin/bash -c "source activate py35 && \
+    conda install -y -c conda-forge jupyter_contrib_nbextensions && \
+    jupyter nbextensions_configurator enable --user"
 
 ##################
 ## Config files ##
