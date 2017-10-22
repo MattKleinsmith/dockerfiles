@@ -1,0 +1,14 @@
+include setup.py
+include LICENSE
+include README.rst
+recursive-include src *
+recursive-include facetracker *.py
+recursive-include /nbs/celeba/FaceTracker/include *
+recursive-include /nbs/celeba/FaceTracker/model *
+recursive-include /nbs/celeba/FaceTracker/src *
+include /nbs/celeba/FaceTracker/license.md
+include /nbs/celeba/FaceTracker/readme.md
+recursive-include examples *.py
+recursive-include doc Makefile *.bat *.rst *.py
+recursive-include doc/images *.png
+prune pyFaceTracker.egg-info*

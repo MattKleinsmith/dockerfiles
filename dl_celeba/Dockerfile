@@ -66,6 +66,22 @@ RUN apt-get update --fix-missing && apt-get install -y \
     libcv-dev \
     libopencv-dev
 
+#################
+## Facetracker ##
+#################
+
+ENV CELEB_PATH /nbs/celeba
+
+ADD FaceTracker $CELEB_PATH/FaceTracker
+
+ADD facetracker $CELEB_PATH/facetracker
+
+RUN $CELEB_PATH/facetracker/make_opencv_lib_links.sh
+
+WORKDIR $CELEB_PATH/facetracker/
+
+RUN python2 $CELEB_PATH/facetracker/setup.py install
+
 ##################
 ## Config files ##
 ##################
@@ -76,4 +92,4 @@ ADD .vim /root/.vim
 
 ADD .bashrc /root/.bashrc
 
-WORKDIR /nbs
+WORKDIR $CELEB_PATH
