@@ -41,8 +41,6 @@ RUN pip install --upgrade \
         tensorflow-gpu \
         xgboost
 
-RUN conda install -y pytorch torchvision cuda80 -c soumith
-
 RUN CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
 
 #############
@@ -82,6 +80,37 @@ WORKDIR $CELEB_PATH/facetracker/
 
 RUN python2 $CELEB_PATH/facetracker/setup.py install
 
+#RUN pip install pyreadlines
+
+RUN conda install -y pytorch torchvision cuda80 -c soumith
+
+RUN apt-get install -y \
+    python-tk
+
+
+############################
+## wkentaro's pytorch-fcn ##
+############################
+
+RUN pip install torchfcn
+
+###########################
+
+# pip or conda?
+#RUN pip install qt
+
+RUN pip install tqdm
+
+RUN conda install -y -c anaconda qt
+
+##########################
+
+RUN apt-get install -y font-manager
+RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula \
+    select true | debconf-set-selections
+RUN apt-get install -y ttf-mscorefonts-installer
+RUN rm ~/.cache/matplotlib -fr
+
 ##################
 ## Config files ##
 ##################
@@ -92,4 +121,6 @@ ADD .vim /root/.vim
 
 ADD .bashrc /root/.bashrc
 
-WORKDIR $CELEB_PATH
+ENV LANG C.UTF-8
+
+WORKDIR /nbs/Portraitseg

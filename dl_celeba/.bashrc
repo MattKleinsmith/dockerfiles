@@ -105,7 +105,7 @@ alias rmtb="rm /tmp/tb"
 # Jupyter
 export CUDA_DEVICE_ORDER="PCI_BUS_ID"
 alias j8="CUDA_VISIBLE_DEVICES=0 jupyter notebook --port=8888 --allow-root"
-alias j9="CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889"
+alias j9="CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889 --allow-root"
 alias j0="CUDA_VISIBLE_DEVICES=2 jupyter notebook --port=8890"
 # Git
 alias gs='git status'
@@ -117,9 +117,16 @@ alias ga="git add"
 alias gcm="git commit -m"
 # Python
 alias p="ipython"
-alias p3="ipython3"
+alias p2="ipython2"
 # Misc
 function set-title(){
+  if [[ -z "$ORIG" ]]; then
+    ORIG=$PS1
+  fi
+  TITLE="\[\e]2;$*\a\]"
+  PS1=${ORIG}${TITLE}
+}
+function st(){
   if [[ -z "$ORIG" ]]; then
     ORIG=$PS1
   fi
@@ -165,3 +172,5 @@ function ipy(){
     ipython --no-confirm-exit -i "$1"
 }
 alias p3="source activate py35"
+export MKL_DYNAMIC=FALSE
+export QT_QPA_PLATFORM='offscreen'
