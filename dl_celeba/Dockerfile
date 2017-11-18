@@ -21,7 +21,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
     libxrender1
 
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-    wget --quiet https://repo.continuum.io/archive/Anaconda3-4.3.1-Linux-x86_64.sh -O ~/anaconda.sh && \
+    wget --quiet https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
     rm ~/anaconda.sh
 
@@ -54,18 +54,20 @@ RUN conda install -y notebook && \
 # Add my Jupyter settings
 ADD .jupyter /root/.jupyter
 
+# For creating interactive visualizations in notebooks
 RUN conda install -y -c conda-forge ipywidgets
 
 ############
 ## OpenCV ##
 ############
 
+# Needed for FaceTracker
 RUN apt-get update --fix-missing && apt-get install -y \
     libcv-dev \
     libopencv-dev
 
 #################
-## Facetracker ##
+## FaceTracker ##
 #################
 
 ENV CELEB_PATH /nbs/celeba
@@ -80,13 +82,10 @@ WORKDIR $CELEB_PATH/facetracker/
 
 RUN python2 $CELEB_PATH/facetracker/setup.py install
 
-#RUN pip install pyreadlines
-
 RUN conda install -y pytorch torchvision cuda80 -c soumith
 
 RUN apt-get install -y \
     python-tk
-
 
 ############################
 ## wkentaro's pytorch-fcn ##
@@ -94,16 +93,16 @@ RUN apt-get install -y \
 
 RUN pip install torchfcn
 
-###########################
-
-# pip or conda?
-#RUN pip install qt
+##########
+## TQDM ##
+##########
 
 RUN pip install tqdm
-
 RUN conda install -y -c anaconda qt
 
-##########################
+###########
+## Fonts ##
+###########
 
 RUN apt-get install -y font-manager
 RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula \
