@@ -10,11 +10,11 @@ VERSION = '0.1.1'
 DESCRIPTION = 'A python wrapper for the FaceTracker library by Jason Mora Saragih'
 LONG_DESCRIPTION = """
     pyfacetracker is a thin wrapper around FaceTracker.It enables using
-FaceTracker
-while enjoyging the comfort of the Python scripting language.
-FaceTracker is a library
-for deformable face tracking written in C++using
-OpenCV 2, authored by Jason Saragih and maintained by Kyle McDonald."""
+    FaceTracker
+    while enjoying the comfort of the Python scripting language.
+    FaceTracker is a library
+    for deformable face tracking written in C++ using
+    OpenCV 2, authored by Jason Saragih and maintained by Kyle McDonald."""
 AUTHOR = 'Amit Aides'
 EMAIL = 'amitibo@tx.technion.ac.il'
 URL = 'https://bitbucket.org/amitibo/pyfacetracker'
