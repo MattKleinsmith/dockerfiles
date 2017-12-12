@@ -31,7 +31,7 @@ OPENCV_BASE = '/usr/include/opencv2'
 OPENCV_LIB_DIRS = ['/usr/lib/x86_64-linux-gnu']
 OPENCV_VERSION = '.so.2.4.9'
 
-FACETRACKER_BASE = '/nbs/celeba/FaceTracker'
+FACETRACKER_BASE = '/code/celeba/FaceTracker'
 
 OPENCV_INCLUDE_DIRS = [
     OPENCV_BASE + p for p in (

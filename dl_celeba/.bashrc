@@ -116,8 +116,8 @@ alias gd="git diff"
 alias ga="git add"
 alias gcm="git commit -m"
 # Python
-alias p="ipython"
-alias p2="ipython2"
+alias p="ipython --no-confirm-exit"
+alias p2="ipython2 --no-confirm-exit"
 # Misc
 function set-title(){
   if [[ -z "$ORIG" ]]; then
@@ -140,10 +140,6 @@ stty -ixon
 alias size1="df -h | grep --color=never 'Used\|root'"
 alias size2="du -h --max-depth=1 ."
 # Directories
-alias t="cd /nbs/Tiramisu"
-alias d="cd /nbs/impactai/dstl"
-alias nb="cd /nbs"
-alias seg="cd /nbs/segstyle/"
 export t="/tmp"
 alias bundle="cd ~/.vim/bundle"
 # Terminal settings
@@ -174,3 +170,5 @@ function ipy(){
 alias p3="source activate py35"
 export MKL_DYNAMIC=FALSE
 export QT_QPA_PLATFORM='offscreen'
+alias i="python setup.py install"
+alias t="python -m portraitseg.train_portraitfcnplus -g 0 -rs -s 500 -e 10"

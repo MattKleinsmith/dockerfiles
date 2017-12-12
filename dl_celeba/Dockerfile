@@ -1,3 +1,4 @@
+# FROM nvidia/cuda:8.0-cudnn6-runtime-ubuntu16.04
 FROM gcr.io/tensorflow/tensorflow:latest-gpu
 
 ###########
@@ -9,6 +10,10 @@ RUN apt-get update --fix-missing && apt-get install -y \
     git \
     vim \
     wget
+
+# TODO:
+# apt-get clean && \
+# rm -rf /var/lib/apt/lists/*
 
 ##############
 ## Anaconda ##
@@ -70,11 +75,13 @@ RUN apt-get update --fix-missing && apt-get install -y \
 ## FaceTracker ##
 #################
 
-ENV CELEB_PATH /nbs/celeba
+ENV CELEB_PATH /code/celeba
 
 ADD FaceTracker $CELEB_PATH/FaceTracker
 
-ADD facetracker $CELEB_PATH/facetracker
+# Filename discrepancy due to Dropbox's case insensitivity
+# TODO: Rename facetracker to pyfacetracker in all files. Case sensitive.
+ADD pyfacetracker $CELEB_PATH/facetracker
 
 RUN $CELEB_PATH/facetracker/make_opencv_lib_links.sh
 
@@ -84,7 +91,7 @@ RUN python2 $CELEB_PATH/facetracker/setup.py install
 
 RUN conda install -y pytorch torchvision cuda80 -c soumith
 
-RUN apt-get install -y \
+RUN apt-get update --fix-missing && apt-get install -y \
     python-tk
 
 ############################
@@ -110,6 +117,26 @@ RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula \
 RUN apt-get install -y ttf-mscorefonts-installer
 RUN rm ~/.cache/matplotlib -fr
 
+################
+## Networking ##
+################
+
+RUN apt-get update --fix-missing && apt-get install -y \
+    net-tools
+
+################
+## PostgresQL ##
+################
+
+RUN apt-get update --fix-missing && apt-get install -y \
+    postgresql \
+    libpq-dev \
+    postgresql-client \
+    postgresql-client-common \
+    postgresql-contrib
+
+RUN pip install psycopg2
+
 ##################
 ## Config files ##
 ##################
@@ -122,4 +149,4 @@ ADD .bashrc /root/.bashrc
 
 ENV LANG C.UTF-8
 
-WORKDIR /nbs/Portraitseg
+WORKDIR /code/portraitseg
