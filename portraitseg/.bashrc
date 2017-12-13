@@ -172,3 +172,4 @@ export MKL_DYNAMIC=FALSE
 export QT_QPA_PLATFORM='offscreen'
 alias i="python setup.py install"
 alias t="python -m portraitseg.train_portraitfcnplus -g 0 -rs -s 500 -e 10"
+alias a="python -m portraitseg.api portraitseg/outputs/profile_2.jpg"
