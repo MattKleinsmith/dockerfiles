@@ -109,30 +109,35 @@ RUN git checkout opencv2 && \
 
 WORKDIR /
 
-RUN wget https://bitbucket.org/amitibo/pyfacetracker/downloads/pyFaceTracker-0.1.1.tar.gz && \
-    tar -x -f pyFaceTracker-0.1.1.tar.gz
+ENV PYFACETRACKER pyFaceTracker-0.1.1
 
-RUN wget https://raw.githubusercontent.com/MatthewKleinsmith/dockerfiles/master/portraitseg/pyfacetracker/setup.py -O /pyFaceTracker-0.1.1/setup.py
+RUN wget https://bitbucket.org/amitibo/pyfacetracker/downloads/$PYFACETRACKER.tar.gz && \
+    tar -x -f $PYFACETRACKER.tar.gz
 
-#ADD FaceTracker /code/FaceTracker
-#
-#ADD pyfacetracker /code/facetracker
-#
-#RUN /code/facetracker/make_opencv_lib_links.sh
-#
-#WORKDIR /code/facetracker/
-#
-#
-## Unfortunately pyfacetracker required Python 2
-#RUN apt-get update --fix-missing && apt-get install -y \
-#    python-setuptools
-#
-#RUN wget https://bootstrap.pypa.io/get-pip.py && \
-#    python2 get-pip.py
-#
-#RUN python2 -m pip install numpy
-#
-#RUN python2 /code/facetracker/setup.py install
+RUN echo "hi"
+
+RUN wget https://raw.githubusercontent.com/MatthewKleinsmith/dockerfiles/master/portraitseg/pyfacetracker/setup.py -O /$PYFACETRACKER/setup.py
+
+RUN wget https://raw.githubusercontent.com/MatthewKleinsmith/dockerfiles/master/portraitseg/pyfacetracker/make_opencv_lib_links.sh -O /$PYFACETRACKER/make_opencv_lib_links.sh
+
+RUN chmod +x /$PYFACETRACKER/make_opencv_lib_links.sh && \
+    /$PYFACETRACKER/make_opencv_lib_links.sh
+
+RUN apt-get update --fix-missing && apt-get install -y \
+    python-dev \
+    python-setuptools
+
+RUN wget https://bootstrap.pypa.io/get-pip.py && \
+    python2 get-pip.py
+
+RUN python2 -m pip install \
+    numpy \
+    matplotlib \
+    pillow
+
+WORKDIR $PYFACETRACKER
+
+RUN python2 setup.py install
 
 ##################
 ## Config files ##
