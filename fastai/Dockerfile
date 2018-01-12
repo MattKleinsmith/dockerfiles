@@ -1,39 +1,70 @@
-FROM gcr.io/tensorflow/tensorflow:latest-gpu
+# 2018-01-12: This Dockerfile is based on http://files.fast.ai/setup/paperspace
+# README: https://github.com/MattKleinsmith/dockerfiles/tree/master/fastai
+
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+
+# To allow unicode characters in the terminal
+ENV LANG C.UTF-8
+
+###########
+## Tools ##
+###########
+
+RUN apt-get update --fix-missing && apt-get install -y \
+    wget \
+    vim \
+    git \
+    unzip
 
 ##############
 ## Anaconda ##
 ##############
 
-RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
-    libglib2.0-0 libxext6 libsm6 libxrender1 \
-    git mercurial subversion
+RUN apt-get update --fix-missing && apt-get install -y \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1
 
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-    wget --quiet https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
+    wget --quiet https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
     rm ~/anaconda.sh
 
 ENV PATH /opt/conda/bin:$PATH
 
-#############
-## fast.ai ##
-#############
+#########################
+## fastai dependencies ##
+#########################
 
-RUN pip install --upgrade pip
+# You should have a fastai clone on your host machine.
+# The following is just to get the dependencies for the clone onto the container.
+# You'll give the container access to the clone on your host machine,
+# so that the changes you make in the notebooks persist even if the container
+# dies.
 
-# Tensorflow
-ENV TF_BINARY_URL https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-0.12.0-cp27-none-linux_x86_64.whl
-RUN pip install --ignore-installed --upgrade $TF_BINARY_URL
+RUN git clone https://github.com/fastai/fastai.git /code/fastai
 
-RUN pip install \
-    keras \
-    bcolz
+WORKDIR /code/fastai
 
-RUN conda install -y -c menpo dlib=18.18
+RUN conda env update
 
-RUN conda install -y numpy
+# Solves: libjpeg.so.8: cannot open shared object file: No such file or directory
+RUN /bin/bash -c "source activate fastai && conda update pillow"
 
-RUN conda install -y -c menpo opencv3=3.2.0 && \
-    apt-get install -y libgtk2.0-0
+RUN jupyter notebook --generate-config --allow-root && \
+    echo "c.NotebookApp.ip = '*'" >> ~/.jupyter/jupyter_notebook_config.py && \
+    echo "c.NotebookApp.open_browser = False" >> ~/.jupyter/jupyter_notebook_config.py
 
-WORKDIR /nbs
+RUN /bin/bash -c "\
+    source activate fastai && \
+    pip install ipywidgets && \
+    jupyter nbextension enable --py widgetsnbextension --sys-prefix"
+
+RUN echo export CUDA_DEVICE_ORDER="PCI_BUS_ID" >> ~/.bashrc
+
+RUN echo "alias j8=\"ln -sf /data /code/fastai/courses/dl1/ && source activate fastai && CUDA_VISIBLE_DEVICES=0 jupyter notebook --port=8888 --allow-root\"" >> ~/.bashrc
+RUN echo "alias jupyter_notebook_GPU_0_PORT_8888=j8" >> ~/.bashrc
+
+RUN echo "alias j9=\"ln -sf /data /code/fastai/courses/dl1/ && source activate fastai && CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889 --allow-root\"" >> ~/.bashrc
+RUN echo "alias jupyter_notebook_GPU_1_PORT_8889=j9" >> ~/.bashrc
