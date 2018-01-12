@@ -88,6 +88,8 @@ To allow for faster access next time, enter the following into your host machine
 - `--init`: I don't really understand this option, but it's needed to make Jupyter notebooks run when a container is spawned. If you're curious, here are [the docs](https://docs.docker.com/engine/reference/run/#specify-an-init-process).
 - `-it`: Creates a terminal for the container that the user on the host can interact with.
 
+- `-rm`: Removes the container once it exits. Otherwise inactive containers pile up.
+
 - `-p 8888:8888`: Binds the host's 8888 port to the container's 8888 port, allowing the host to access the container's Jupyter server through the host's Internet browser.
 
 - `-v $CODE:/code` and `-v $DATA:/data`: Gives the container access to the host's `$CODE` and `$DATA` directories and calls them "/code" and "/data" from the container's perspective. **Note: any changes to the files, either made by the host or the container, will change those files from both the host's perspective and the container's perspective.**
