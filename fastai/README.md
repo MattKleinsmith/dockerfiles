@@ -1,8 +1,8 @@
 # Docker for fast.ai
 
-This is for people who have their own deep learning workstation. If you don't have one, consider using [Paperspace](http://forums.fast.ai/t/paperspace-setup-help/9290) to rent GPU access, or [building your own workstation](https://www.topbots.com/deep-confusion-misadventures-in-building-a-machine-learning-server/).
+If you don't have your own deep learning workstation, consider using [Paperspace](http://forums.fast.ai/t/paperspace-setup-help/9290) to rent GPU access instead of using Docker, or consider [building your own workstation](https://www.topbots.com/deep-confusion-misadventures-in-building-a-machine-learning-server/).
 
-As of this writing (2018-01-12), the Docker image works with [lesson1.ipynb](https://github.com/fastai/fastai/blob/master/courses/dl1/lesson1.ipynb).
+As of January 12, 2018, the Docker image works with [the lesson1 notebook](https://github.com/fastai/fastai/blob/master/courses/dl1/lesson1.ipynb). I haven't tested it with other fast.ai notebooks yet.
 
 ## Why Docker
 
@@ -10,7 +10,7 @@ To not let dependencies slow you or anyone else down.
 
 - Once you sort out a mess of dependencies, you'll never have to go through that mess again, because you've documented it in a Dockerfile.
 - Also, no one else has to go through that mess, because you can send them the Dockerfile.
-- If you make a mistake while sorting out a mess of dependencies, you can just delete the container and start from a fresh one; as opposed to trying to undo it on your host machine (I've had to reinstall Ubuntu before).
+- If you make a mistake while sorting out a mess of dependencies, you can just delete the container and start from a fresh one; as opposed to trying to undo it on your host machine. One time before I used Docker, things got so messed up on my host machine that I had to reinstall my operating system.
 
 ## Assumptions
 
@@ -90,13 +90,13 @@ To allow for faster access next time, enter the following into your host machine
 
 - `-p 8888:8888`: Binds the host's 8888 port to the container's 8888 port, allowing the host to access the container's Jupyter server through the host's Internet browser.
 
-- `-v $CODE:/code`: Gives the container access to the host's `$CODE` directory and calls it "/code" from the container's perspective. **Note: any changes to the files, either made by the host or the container, will change those files from both the host's perspective and the container's perspective.**
+- `-v $CODE:/code` and `-v $DATA:/data`: Gives the container access to the host's `$CODE` and `$DATA` directories and calls them "/code" and "/data" from the container's perspective. **Note: any changes to the files, either made by the host or the container, will change those files from both the host's perspective and the container's perspective.**
 
 - `-w="/code/fastai"`: Sets the working directory of the container, from the container's perspective.
 
-- `mwksmith/fastai`: Specifies the ID of the Docker image on [Docker Hub](https://hub.docker.com/). Docker Hub is like GitHub but for Docker images instead of code. The repository is "[mwksmith](https://hub.docker.com/r/mwksmith/portraitseg/)", the Docker image name is "[fastai](https://hub.docker.com/r/mwksmith/portraitseg/)". `docker run` will download the Docker image if it's not already on disk.
+- `mwksmith/fastai`: Specifies the ID of the Docker image on [Docker Hub](https://hub.docker.com/). Docker Hub is like GitHub but for Docker images instead of code. The repository's name is "[mwksmith](https://hub.docker.com/r/mwksmith/portraitseg/)" and the Docker image's name is "[fastai](https://hub.docker.com/r/mwksmith/portraitseg/)". `docker run` will download the Docker image if it's not already on disk.
 
-For more information that exists now, see [the Docker run reference](https://docs.docker.com/engine/reference/run/) and [the Docker run options list](https://docs.docker.com/engine/reference/commandline/run/).
+For more information, see [the Docker run reference](https://docs.docker.com/engine/reference/run/) and [the Docker run options list](https://docs.docker.com/engine/reference/commandline/run/).
 
 If you'd rather talk to a person, you can [create a GitHub issue on this repo](https://github.com/MattKleinsmith/dockerfiles/issues/new), or post on [forums.fast.ai](forums.fast.ai) and put "@Matthew" in your post so I get an email.
 
