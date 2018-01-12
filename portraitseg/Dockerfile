@@ -87,7 +87,15 @@ RUN pip install psycopg2
 ## PyTorch ##
 #############
 
-RUN conda install -y pytorch torchvision cuda90 -c pytorch
+RUN conda install -y numpy pyyaml mkl setuptools cmake cffi
+
+RUN conda install -y magma-cuda90 -c soumith
+
+RUN git clone --recursive https://github.com/pytorch/pytorch /pytorch
+
+WORKDIR /pytorch
+
+RUN python setup.py install
 
 RUN pip install torchfcn
 
@@ -95,11 +103,12 @@ RUN pip install torchfcn
 ## FaceTracker ##
 #################
 
+WORKDIR /
+
 RUN apt-get update --fix-missing && apt-get install -y \
     libcv-dev \
-    libopencv-dev
-
-RUN git clone git://github.com/kylemcdonald/FaceTracker.git
+    libopencv-dev && \
+    git clone git://github.com/kylemcdonald/FaceTracker.git
 
 WORKDIR /FaceTracker
 
@@ -112,32 +121,24 @@ WORKDIR /
 ENV PYFACETRACKER pyFaceTracker-0.1.1
 
 RUN wget https://bitbucket.org/amitibo/pyfacetracker/downloads/$PYFACETRACKER.tar.gz && \
-    tar -x -f $PYFACETRACKER.tar.gz
-
-RUN echo "hi"
-
-RUN wget https://raw.githubusercontent.com/MatthewKleinsmith/dockerfiles/master/portraitseg/pyfacetracker/setup.py -O /$PYFACETRACKER/setup.py
-
-RUN wget https://raw.githubusercontent.com/MatthewKleinsmith/dockerfiles/master/portraitseg/pyfacetracker/make_opencv_lib_links.sh -O /$PYFACETRACKER/make_opencv_lib_links.sh
-
-RUN chmod +x /$PYFACETRACKER/make_opencv_lib_links.sh && \
+    tar -x -f $PYFACETRACKER.tar.gz && rm $PYFACETRACKER.tar.gz && \
+    wget https://raw.githubusercontent.com/MatthewKleinsmith/dockerfiles/master/portraitseg/pyfacetracker/setup.py -O /$PYFACETRACKER/setup.py && \
+    wget https://raw.githubusercontent.com/MatthewKleinsmith/dockerfiles/master/portraitseg/pyfacetracker/make_opencv_lib_links.sh -O /$PYFACETRACKER/make_opencv_lib_links.sh && \
+    chmod +x /$PYFACETRACKER/make_opencv_lib_links.sh && \
     /$PYFACETRACKER/make_opencv_lib_links.sh
-
-RUN apt-get update --fix-missing && apt-get install -y \
-    python-dev \
-    python-setuptools
-
-RUN wget https://bootstrap.pypa.io/get-pip.py && \
-    python2 get-pip.py
-
-RUN python2 -m pip install \
-    numpy \
-    matplotlib \
-    pillow
 
 WORKDIR $PYFACETRACKER
 
-RUN python2 setup.py install
+RUN apt-get update --fix-missing && apt-get install -y \
+        python-dev \
+        python-setuptools && \
+    wget https://bootstrap.pypa.io/get-pip.py && \
+        python2 get-pip.py && \
+    python2 -m pip install \
+        numpy \
+        matplotlib \
+        pillow && \
+    python2 setup.py install
 
 ##################
 ## Config files ##
