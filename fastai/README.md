@@ -19,7 +19,7 @@ To not let dependencies slow you or anyone else down.
     - (TODO: Extend this guide to include Mac and Windows users)
 - You've installed an [NVIDIA driver](http://www.nvidia.com/Download/index.aspx).
 - You've installed [docker](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/).
-- You've installed [nvidia docker](ttps://github.com/NVIDIA/nvidia-docker).
+- You've installed [nvidia docker](https://github.com/NVIDIA/nvidia-docker).
 
 ## How to use the Docker image
 
