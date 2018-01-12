@@ -113,4 +113,6 @@ alias jupyter_notebook_GPU_0_PORT_8888=\
 
 ## Extending the Dockerfile and building your own image
 
-(My energy has fizzled out here. If you'd like help with this, let me know by [creating a GitHub issue on this repo](https://github.com/MattKleinsmith/dockerfiles/issues/new), or posting on [forums.fast.ai](forums.fast.ai) and putting "@Matthew" in your post so I get an email. )
+Hamel Husain wrote [a great Docker tutorial](https://towardsdatascience.com/how-docker-can-help-you-become-a-more-effective-data-scientist-7fc048ef91d5) and it'll teach you what you need to know to create your own Dockerfiles and Docker images.
+
+If you have any questions, let me know by [creating a GitHub issue on this repo](https://github.com/MattKleinsmith/dockerfiles/issues/new), or posting on [forums.fast.ai](forums.fast.ai) and putting "@Matthew" in your post so I get an email.
