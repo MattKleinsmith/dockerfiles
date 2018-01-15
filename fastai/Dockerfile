@@ -58,6 +58,12 @@ RUN jupyter notebook --generate-config --allow-root && \
 
 RUN /bin/bash -c "\
     source activate fastai && \
+    conda install -y notebook && \
+    conda install -y jupyter_contrib_nbextensions -c conda-forge && \
+    jupyter nbextensions_configurator enable --user"
+
+RUN /bin/bash -c "\
+    source activate fastai && \
     pip install ipywidgets && \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix"
 
