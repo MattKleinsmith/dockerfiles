@@ -49,8 +49,9 @@ WORKDIR /code/fastai
 
 RUN conda env update
 
-# Solves: libjpeg.so.8: cannot open shared object file: No such file or directory
-RUN /bin/bash -c "source activate fastai && conda update pillow"
+# Solves: `libjpeg.so.8: cannot open shared object file: No such file or directory`
+#          after `from PIL import Image`
+RUN apt-get install -y libjpeg-turbo8
 
 RUN jupyter notebook --generate-config --allow-root && \
     echo "c.NotebookApp.ip = '*'" >> ~/.jupyter/jupyter_notebook_config.py && \
