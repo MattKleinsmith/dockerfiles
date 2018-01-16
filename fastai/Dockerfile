@@ -61,7 +61,8 @@ RUN /bin/bash -c "\
     source activate fastai && \
     conda install -y notebook && \
     conda install -y jupyter_contrib_nbextensions -c conda-forge && \
-    jupyter nbextensions_configurator enable --user"
+    jupyter nbextensions_configurator enable --user && \
+    jupyter nbextension enable collapsible_headings/main"
 
 RUN /bin/bash -c "\
     source activate fastai && \
@@ -75,3 +76,9 @@ RUN echo "alias jupyter_notebook_GPU_0_PORT_8888=j8" >> ~/.bashrc
 
 RUN echo "alias j9=\"ln -sf /data /code/fastai/courses/dl1/ && source activate fastai && CUDA_VISIBLE_DEVICES=1 jupyter notebook --port=8889 --allow-root\"" >> ~/.bashrc
 RUN echo "alias jupyter_notebook_GPU_1_PORT_8889=j9" >> ~/.bashrc
+
+# https://software.intel.com/en-us/mkl
+RUN /bin/bash -c "\
+    source activate fastai && \
+    conda install mkl-service"
+RUN echo "export MKL_DYNAMIC=FALSE" >> ~/.bashrc
