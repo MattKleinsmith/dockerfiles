@@ -1,22 +1,24 @@
 # Docker for fast.ai
 
-If you don't have your own deep learning workstation, consider using [Paperspace](http://forums.fast.ai/t/paperspace-setup-help/9290) to rent GPU access instead of using Docker, or consider [building your own workstation](https://www.topbots.com/deep-confusion-misadventures-in-building-a-machine-learning-server/).
-
-As of January 12, 2018, the Docker image works with [the lesson1 notebook](https://github.com/fastai/fastai/blob/master/courses/dl1/lesson1.ipynb). I haven't tested it with other fast.ai notebooks yet.
+2018-01-12: The Docker image works with [the lesson1 notebook](https://github.com/fastai/fastai/blob/master/courses/dl1/lesson1.ipynb). It's untested for other notebooks.
 
 ## Why Docker
 
 To not let dependencies slow you or anyone else down.
 
-- Once you sort out a mess of dependencies, you'll never have to go through that mess again, because you've documented it in a Dockerfile.
-- Also, no one else has to go through that mess, because you can send them the Dockerfile.
-- If you make a mistake while sorting out a mess of dependencies, you can just delete the container and start from a fresh one; as opposed to trying to undo it on your host machine. One time before I used Docker, things got so messed up on my host machine that I had to reinstall my operating system.
+- If you make a mistake while sorting out a mess of dependencies, you can just delete the Docker container and start from a fresh one; as opposed to trying to undo it on your operating system.
+- Once you sort out a mess of dependencies, you'll never have to do it again. Even if you install a new operating system or move to a new computer, you can quickly recover your environment by downloading the corresponding Docker image or Dockerfile.
+- Also, no one else will have to go through that mess, because you can send them the Docker image or Dockerfile.
+
+For more information, check out [this Docker tutorial for data science](https://towardsdatascience.com/how-docker-can-help-you-become-a-more-effective-data-scientist-7fc048ef91d5).
+
 
 ## Assumptions
 
 - You have a machine with an NVIDIA GPU in it.
+  - If you don't, check out [Paperspace](http://forums.fast.ai/t/paperspace-setup-help/9290) or consider [building your own deep learning workstation](https://www.topbots.com/deep-confusion-misadventures-in-building-a-machine-learning-server/).
 - Your machine is running Ubuntu.
-    - nvidia docker only works on Linux, unfortunately.
+  - nvidia docker only works on Linux, unfortunately.
 - You've installed an [NVIDIA driver](http://www.nvidia.com/Download/index.aspx).
 - You've installed [docker](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/).
 - You've installed [nvidia docker](https://github.com/NVIDIA/nvidia-docker).
