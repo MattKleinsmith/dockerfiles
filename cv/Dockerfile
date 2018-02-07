@@ -40,12 +40,15 @@ ENV PATH /opt/conda/bin:$PATH
 
 # Anaconda comes with MKL. Using Intel's conda channel doesn't seem needed.
 
-# https://docs.anaconda.com/mkl-service/
-# "The main purpose of the package is to allow the user to change the number of CPU’s MKL is using at runtime."
+# To allow setting the number of CPU threads
 RUN conda install mkl-service
 
 # To allow MKL to see all CPU threads
 ENV MKL_DYNAMIC=FALSE
+
+# To set number of CPU threads:
+#   import mkl
+#   mkl.set_num_threads(NUM_THREADS)
 
 # Sometimes allowing more threads slows things down.
 # Consider these results from my system (6 cores, 2 threads per core, Intel i7-6850K):
@@ -58,10 +61,6 @@ ENV MKL_DYNAMIC=FALSE
 #     12          | 6.78
 # Benchmark code from: http://markus-beuckelmann.de/blog/boosting-numpy-blas.html
 # Discussion of slow downs from more threads: https://unix.stackexchange.com/a/80427/201733
-
-# To set number of CPU threads:
-#   import mkl
-#   mkl.set_num_threads(NUM_THREADS)
 
 #########################
 ## Andres dependencies ##
@@ -96,6 +95,9 @@ RUN conda install pytorch torchvision cuda90 -c pytorch
 ###########
 ## Other ##
 ###########
+
+# Using Python Fire instead of argparse.
+# https://github.com/google/python-fire
 
 RUN pip install \
     fire
