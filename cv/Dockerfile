@@ -34,28 +34,34 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
 
 ENV PATH /opt/conda/bin:$PATH
 
-###############
-## Intel MKL ##
-###############
+########################
+## Intel MKL settings ##
+########################
 
-# Math Kernel Library
-
-# https://hub.docker.com/r/intelpython/intelpython3_core/~/dockerfile/
-
-ENV ACCEPT_INTEL_PYTHON_EULA=yes
-
-RUN conda config --add channels intel\
-    && conda install  -y -q intelpython3_core=2018.0.1 python=3 \
-    && apt-get update -qqq \
-    && apt-get install -y -q g++
+# Anaconda comes with MKL. Using Intel's conda channel doesn't seem needed.
 
 # https://docs.anaconda.com/mkl-service/
-
 # "The main purpose of the package is to allow the user to change the number of CPU’s MKL is using at runtime."
 RUN conda install mkl-service
 
 # To allow MKL to see all CPU threads
 ENV MKL_DYNAMIC=FALSE
+
+# Sometimes allowing more threads slows things down.
+# Consider these results from my system (6 cores, 2 threads per core, Intel i7-6850K):
+#   Eigendecomposition of a 2048x2048 matrix in X s.
+#     num threads | X (seconds)
+#     4           | 4.04
+#     5           | 3.95
+#     6           | 4.09
+#     7           | 4.90
+#     12          | 6.78
+# Benchmark code from: http://markus-beuckelmann.de/blog/boosting-numpy-blas.html
+# Discussion of slow downs from more threads: https://unix.stackexchange.com/a/80427/201733
+
+# To set number of CPU threads:
+#   import mkl
+#   mkl.set_num_threads(NUM_THREADS)
 
 #########################
 ## Andres dependencies ##
